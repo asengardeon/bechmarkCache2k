@@ -20,7 +20,12 @@ public class Main {
 		List<String> searches = new ArrayList<>();
 		Map<String, String> mapTest = new HashMap<>();
 		
-		Cache<String, String> cache = new Cache2kBuilder<String, String>() {}.eternal(true).build();
+		Cache2kBuilder<String, String> cacheBuilder = new Cache2kBuilder<String, String>(){};
+        cacheBuilder.eternal(true);
+        cacheBuilder.keepDataAfterExpired(true);
+        cacheBuilder.entryCapacity(Integer.MAX_VALUE);
+        Cache<String, String> cache = cacheBuilder.build();
+			
 		String keyConst = "KeyName";
 		String valueConst = "Val";
 		
@@ -49,6 +54,7 @@ public class Main {
 			v = cache.get(k);
 		}		
 		System.out.println("Finalizou as "+Instant.now());
+		System.out.println("Cache counter: "+cache.asMap().size());
 	}
 
 	private void searchInMap(List<String> searches, Map<String, String> mapTest) {
@@ -60,6 +66,7 @@ public class Main {
 			v = mapTest.get(k);
 		}
 		System.out.println("Finalizou as "+Instant.now());
+		System.out.println("MAp counter: "+mapTest.size());
 	}
 
 	private List<String> createSearchLists(String keyConst) {
